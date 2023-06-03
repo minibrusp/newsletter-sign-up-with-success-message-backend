@@ -18,19 +18,19 @@ app.use((req, res, next) => {
 
 // routes 
 app.get("/", async (req, res) => {
-  res.status(200).json({text: "Hello"})
+  return res.status(200).json({text: "Hello"})
 })
 
 app.get("/subscribe", async (req, res) => {
-  res.status(200).json({text: "Subscribe route"})
+  return res.status(200).json({text: "Subscribe route"})
 })
 
 app.post("/subscribe", async (req, res) => {
   const email = req.body.email
 
   client.setConfig({
-    apiKey: PROCESS.env.MAIL_CHIMP_API,
-    server: PROCESS.env.MAIL_CHIMP_SERVER,
+    apiKey: process.env.MAIL_CHIMP_API,
+    server: process.env.MAIL_CHIMP_SERVER,
   });
 
   try {
@@ -38,14 +38,12 @@ app.post("/subscribe", async (req, res) => {
       email_address: email,
       status: "subscribed",
     });
-    // res.send("Successfully subscribed")
-    res.status(201).json({response: response, status: response.status})
+    return res.status(201).json({response: response, status: response.status})
 
   } catch(err) {
 
-    // res.send("There was an error with signing up, please try again!")
     console.log(err)
-    res.status(400).json({error: err, message: err.response.text })
+    return res.status(400).json({error: err, message: err.response.text })
   }
 })
 
